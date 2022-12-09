@@ -2,6 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require("express");
 // const data = require('./data.js');
+const path = require('path');
 const cors = require('cors');
 
 const app = express();
@@ -10,7 +11,7 @@ const app = express();
 const seedRouter = require('./routes/seedRoutes');
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
-const orderRouter= require('./routes/orderRoutes');
+const orderRouter = require('./routes/orderRoutes');
 
 const corsOptions = {
   origin: ['http://localhost:3000'],
@@ -29,7 +30,7 @@ mongoose
 app.use(cors(corsOptions));
 
 // paypal
-app.get('/api/keys/paypal',(req,res)=>{
+app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
 
@@ -37,7 +38,11 @@ app.get('/api/keys/paypal',(req,res)=>{
 app.use('/api/seed', seedRouter);
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
-app.use('/api/orders',orderRouter);
+app.use('/api/orders', orderRouter);
+
+// const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/frontend/build')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/build/index.html')));
 
 // middleware
 app.use((err, req, res, next) => {
