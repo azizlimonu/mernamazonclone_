@@ -42,7 +42,7 @@ const ProfileScreen = () => {
     }
     try {
       const { data } = await axios.put(
-        'http://localhost:5500/api/users/profile', { name, email, password, },
+        '/api/users/profile', { name, email, password, },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });

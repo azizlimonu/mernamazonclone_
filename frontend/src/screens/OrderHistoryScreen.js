@@ -36,7 +36,7 @@ const OrderHistoryScreen = () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
         const { data } = await axios.get(
-          `http://localhost:5500/api/orders/${userInfo._id}/mine`,
+          `/api/orders/${userInfo._id}/mine`,
           { headers: { Authorization: `Bearer ${userInfo.token}` } }
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });

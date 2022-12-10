@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useReducer } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom'
 import logger from 'use-reducer-logger';
-// compontnt
+
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import Rating from '../components/Rating';
-// bootstrap comp
+
 import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
 import Card from 'react-bootstrap/Card';
@@ -32,7 +32,6 @@ const reducer = (state, action) => {
 const ProductScreen = () => {
   const navigate = useNavigate();
   const params = useParams();
-  // console.log(params);
   const { slug } = params;
 
   const initialState = {
@@ -46,7 +45,7 @@ const ProductScreen = () => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' })
       try {
-        const result = await axios.get(`http://localhost:5500/api/products/slug/${slug}`);
+        const result = await axios.get(`/api/products/slug/${slug}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (error) {
         console.log(error);
@@ -62,7 +61,7 @@ const ProductScreen = () => {
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product.id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    const res = await axios.get(`http://localhost:5500/api/products/${product._id}`);
+    const res = await axios.get(`/api/products/${product._id}`);
     if (res.data.countInStock < quantity) {
       window.alert('Sorry, Product out of stock');
       return;

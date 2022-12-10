@@ -1,11 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import axios from 'axios';
-// import logger from 'use-reducer-logger';
-// component
 import { Product } from '../components';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
-// bootsrap
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet-async';
@@ -35,7 +32,7 @@ const HomeScreen = () => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' })
       try {
-        const result = await axios.get('http://localhost:5500/api/products');
+        const result = await axios.get('/api/products');
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (error) {
         console.log(error);

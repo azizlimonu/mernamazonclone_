@@ -75,7 +75,7 @@ const OrderScreen = () => {
       try {
         dispatch({ type: 'PAY_REQUEST' });
         const { data } = await axios.put(
-          `http://localhost:5500/api/orders/${order._id}/pay`,
+          `/api/orders/${order._id}/pay`,
           details,
           {
             headers: { authorization: `Bearer ${userInfo.token}` },
@@ -98,7 +98,7 @@ const OrderScreen = () => {
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`http://localhost:5500/api/orders/${orderId}`, {
+        const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -118,7 +118,7 @@ const OrderScreen = () => {
       }
     } else {
       const loadPaypalScript = async () => {
-        const { data: clientId } = await axios.get('http://localhost:5500/api/keys/paypal', {
+        const { data: clientId } = await axios.get('/api/keys/paypal', {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         paypalDispatch({
