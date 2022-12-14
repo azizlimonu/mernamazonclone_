@@ -45,6 +45,7 @@ function App() {
       try {
         const { data } = await axios.get(`/api/products/categories`);
         setCategories(data);
+        console.log('categories',data);
       } catch (err) {
         toast.error(getError(err));
       }
@@ -127,6 +128,7 @@ function App() {
           </Container>
         </Navbar>
       </header>
+
       {/* Categories nav */}
       <div
         className={
@@ -139,18 +141,19 @@ function App() {
           <Nav.Item>
             <strong>Categories</strong>
           </Nav.Item>
-          {categories?.map((cat, i) => (
-            <Nav.Item key={i}>
+          {categories?.map((category) => (
+            <Nav.Item key={category}>
               <LinkContainer
-                to={`/search?category=${cat}`}
+                to={`/searchcategory=${category}`}
                 onClick={() => setSidebarIsOpen(false)}
               >
-                <Nav.Link>{cat}</Nav.Link>
+                <Nav.Link>{category}</Nav.Link>
               </LinkContainer>
             </Nav.Item>
           ))}
         </Nav>
       </div>
+
       {/* main section */}
       <main>
         <Container className='mt-3'>
