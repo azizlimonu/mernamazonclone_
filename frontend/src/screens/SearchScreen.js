@@ -73,7 +73,7 @@ export const ratings = [
 const SearchScreen = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
-  console.log(search);
+  // console.log(search);
 
   // get query String
   // if the query is ==> /search?category=shirts . the shirts gonna be cateogry value
@@ -130,7 +130,7 @@ const SearchScreen = () => {
     const filterRating = filter.rating || rating;
     const filterPrice = filter.price || price;
     const sortOrder = filter.order || order;
-    return `/search?category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
+    return `?category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
   }
 
   return (
@@ -148,7 +148,10 @@ const SearchScreen = () => {
                 {/* Category Links */}
                 <Link
                   className={'all' === category ? 'text-bold' : ''}
-                  to={getFilterUrl({ category: 'all' })}
+                  to={{
+                    pathname: '/search',
+                    search: getFilterUrl({ category: 'all' })
+                  }}
                 >
                   Any
                 </Link>
@@ -157,7 +160,10 @@ const SearchScreen = () => {
                 <li key={cat}>
                   <Link
                     className={cat === category ? 'text-bold' : ''}
-                    to={getFilterUrl({ category: cat })}
+                    to={{
+                      pathname: '/search',
+                      search: getFilterUrl({ category: cat })
+                    }}
                   >
                     {cat}
                   </Link>
@@ -173,7 +179,10 @@ const SearchScreen = () => {
               <li>
                 <Link
                   className={'all' === price ? 'text-bold' : ''}
-                  to={getFilterUrl({ price: 'all' })}
+                  to={{
+                    pathname: '/search',
+                    search: getFilterUrl({ price: 'all' })
+                  }}
                 >
                   Any
                 </Link>
@@ -181,7 +190,10 @@ const SearchScreen = () => {
               {prices.map((p) => (
                 <li key={p.value}>
                   <Link
-                    to={getFilterUrl({ price: p.value })}
+                    to={{
+                      pathname: '/search',
+                      search: getFilterUrl({ price: p.value })
+                    }}
                     className={p.value === price ? 'text-bold' : ''}
                   >
                     {p.name}
@@ -198,7 +210,10 @@ const SearchScreen = () => {
               {ratings.map((rate) => (
                 <li key={rate.name}>
                   <Link
-                    to={getFilterUrl({ rating: rate.rating })}
+                    to={{
+                      pathname: '/search',
+                      search: getFilterUrl({ rating: rate.rating })
+                    }}
                     className={`${rate.rating}` === `${rating}` ? 'text-bold' : ''}
                   >
                     <Rating caption={' & up'} rating={rate.rating}></Rating>
@@ -207,7 +222,10 @@ const SearchScreen = () => {
               ))}
               <li>
                 <Link
-                  to={getFilterUrl({ rating: 'all' })}
+                  to={{
+                    pathname: '/search',
+                    search: getFilterUrl({ rating: 'all' })
+                  }}
                   className={rating === 'all' ? 'text-bold' : ''}
                 >
                   <Rating caption={' & up'} rating={0}></Rating>
@@ -249,7 +267,10 @@ const SearchScreen = () => {
                   <select
                     value={order}
                     onChange={(e) => {
-                      navigate(getFilterUrl({ order: e.target.value }));
+                      navigate({
+                        pathname: '/search',
+                        search: getFilterUrl({ order: e.target.value }),
+                      });
                     }}
                   >
                     <option value="newest">Newest Arrivals</option>
@@ -277,7 +298,10 @@ const SearchScreen = () => {
                   <LinkContainer
                     key={x + 1}
                     className="mx-1"
-                    to={getFilterUrl({ page: x + 1 })}
+                    to={{
+                      pathname: '/search',
+                      search: getFilterUrl({ page: x + 1 })
+                    }}
                   >
                     <Button
                       className={Number(page) === x + 1 ? 'text-bold' : ''}
