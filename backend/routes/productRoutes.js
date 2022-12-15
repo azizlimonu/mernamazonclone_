@@ -1,6 +1,8 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
 const Product = require('../models/productModel');
+const { isAuth } = require('../utils/isAuth');
+const { isAdmin } = require('../utils/isAdmin');
 
 const router = express.Router();
 
@@ -16,8 +18,30 @@ router.get('/categories', expressAsyncHandler(async (req, res) => {
   res.send(categories);
 }));
 
-// seachFilter for product
 const PAGE_SIZE = 3;
+router.get(
+  '/admin',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || PAGE_SIZE;
+
+    const products = await Product.find()
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const countProducts = await Product.countDocuments();
+    res.send({
+      products,
+      countProducts,
+      page,
+      pages: Math.ceil(countProducts / pageSize),
+    });
+  })
+);
+
+// seachFilter for product
 router.get('/search', expressAsyncHandler(async (req, res) => {
   const { query } = req;
   const pageSize = query.pageSize || PAGE_SIZE;
@@ -89,7 +113,7 @@ router.get('/search', expressAsyncHandler(async (req, res) => {
     ...priceFilter,
     ...ratingFilter,
   });
-  
+
   res.send({
     products,
     countProducts,

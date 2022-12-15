@@ -23,7 +23,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI,
+    { usenewurlparser: true, useunifiedtopology: true, })
   .then(() => { console.log('connected to mongoDB') })
   .catch((error) => console.log('connecting failed', error.message));
 
