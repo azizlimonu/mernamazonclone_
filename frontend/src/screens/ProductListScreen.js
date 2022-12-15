@@ -14,7 +14,7 @@ const reducer = (state, action) => {
     case 'FETCH_SUCCESS':
       return {
         ...state,
-        product: action.payload.products,
+        products: action.payload.products,
         page: action.payload.page,
         pages: action.payload.pages,
         loading: false
@@ -57,7 +57,7 @@ const ProductListScreen = () => {
       <h1>Products</h1>
       {loading ? <Loading /> : error ? <Error>{error}</Error> : (
         <>
-          <table>
+          <table className='table'>
             <thead>
               <tr>
                 <th>ID</th>
