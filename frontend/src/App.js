@@ -27,6 +27,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import SearchBox from './components/SearchBox';
+import SearchScreen from "./screens/SearchScreen";
 
 // utils
 import { Store } from './store';
@@ -45,7 +46,7 @@ function App() {
       try {
         const { data } = await axios.get(`/api/products/categories`);
         setCategories(data);
-        console.log('categories',data);
+        console.log('categories', data);
       } catch (err) {
         toast.error(getError(err));
       }
@@ -133,7 +134,7 @@ function App() {
       <div
         className={
           sidebarIsOpen
-            ? 'active-nav side-navbar f-flex justify-content-between flex-wrap flex-column'
+            ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
             : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
         }
       >
@@ -141,10 +142,13 @@ function App() {
           <Nav.Item>
             <strong>Categories</strong>
           </Nav.Item>
-          {categories?.map((category) => (
+          {categories.map((category) => (
             <Nav.Item key={category}>
               <LinkContainer
-                to={`/searchcategory=${category}`}
+                to={{
+                  pathname: "/search",
+                  search: `?category=${category}`,
+                }}
                 onClick={() => setSidebarIsOpen(false)}
               >
                 <Nav.Link>{category}</Nav.Link>
@@ -169,6 +173,7 @@ function App() {
             <Route path='/order/:id' element={<OrderScreen />} />
             <Route path='/orderhistory' element={<OrderHistoryScreen />} />
             <Route path='/profile' element={<ProfileScreen />} />
+            <Route path='/search' element={<SearchScreen />} />
           </Routes>
         </Container>
       </main >

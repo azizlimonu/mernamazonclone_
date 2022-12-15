@@ -13,12 +13,14 @@ code {
 }
 
 main {
+  flex:1;
   padding: 1rem;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-outline-primary {
   background-color: #f0c040;
-  color: #000;
+  color: #000000;
 }
 
 .rating span {
@@ -79,18 +81,9 @@ header a {
 }
 
 /* sidebar */
-.active-cont {
-  margin-left: 2440px;
+.navbar-brand {
+  font-weight: bold;
 }
-
-.active-nav {
-  left: 0;
-}
-
-.site-container{
-  transition: 0.4s;
-}
-
 .side-navbar {
   width: 240px;
   height: 100%;
@@ -98,4 +91,17 @@ header a {
   left: -300px;
   background-color: #100901;
   transition: 0.5s;
+}
+
+.site-container {
+  transition: 0.4s;
+}
+.active-cont {
+  margin-left: 240px;
+}
+.active-nav {
+  left: 0;
+}
+.text-bold {
+  font-weight: bold;
 }
