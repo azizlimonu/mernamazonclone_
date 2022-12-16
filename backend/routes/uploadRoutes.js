@@ -7,6 +7,7 @@ const { isAuth } = require('../utils/isAuth');
 const { isAdmin } = require('../utils/isAdmin');
 
 const upload = multer();
+require('dotenv').config();
 
 router.post('/', isAuth, isAdmin, upload.single('file'), async (req, res) => {
   cloudinary.config({
@@ -14,7 +15,7 @@ router.post('/', isAuth, isAdmin, upload.single('file'), async (req, res) => {
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
-  
+
   const streamUpload = (req) => {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream((error, result) => {

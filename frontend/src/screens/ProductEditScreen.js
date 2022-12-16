@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import Error from '../components/Error';
 import Loading from '../components/Loading';
 import { Store } from '../store';
-// import { Store } from '../store';
 import { getError } from '../utils/getError';
 
 const reducer = (state, action) => {
