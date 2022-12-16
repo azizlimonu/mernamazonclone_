@@ -104,7 +104,7 @@ const ProductListScreen = () => {
           </div>
         </Col>
       </Row>
-      {loadingCreate && <Loading/> }
+      {loadingCreate && <Loading />}
 
       {loading ? <Loading /> : error ? <Error>{error}</Error> : (
         <>
@@ -116,6 +116,7 @@ const ProductListScreen = () => {
                 <th>PRICE</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
+                <th>ACTIONS</th>
               </tr>
             </thead>
             {/* body */}
@@ -127,6 +128,15 @@ const ProductListScreen = () => {
                   <td>{item.price}</td>
                   <td>{item.category}</td>
                   <td>{item.brand}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => navigate(`/admin/product/${item._id}`)}
+                    >
+                      Edit
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
