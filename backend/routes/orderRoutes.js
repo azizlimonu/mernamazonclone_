@@ -7,11 +7,37 @@ const { isAdmin } = require('../utils/isAdmin');
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
 
+// router for orders
 router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   const orders = await Order.find().populate('user', 'name');
   res.send(orders);
 }));
 
+// order for update delivered product
+router.put('/:id/deliver', isAuth, expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    await order.save();
+    res.send({ message: 'Order Delivered' });
+  } else {
+    res.status(404).send({ message: 'Order Not Found' });
+  }
+}));
+
+// router for delete order
+router.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    await order.remove();
+    res.send({ message: 'Order has been deleted' });
+  } else {
+    res.status(404).send({ message: 'Order Not Found' });
+  }
+}));
+
+// router for create an order
 router.post('/', isAuth, expressAsyncHandler(async (req, res) => {
   const newOrder = new Order({
     orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
@@ -28,7 +54,7 @@ router.post('/', isAuth, expressAsyncHandler(async (req, res) => {
   res.status(201).send({ message: "New Order Created", order });
 }));
 
-// router for admin
+// router for admin to know summary of the orders
 router.get('/summary', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   const orders = await Order.aggregate([
     {
