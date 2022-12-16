@@ -13,7 +13,7 @@ code {
 }
 
 main {
-  flex:1;
+  flex: 1;
   padding: 1rem;
 }
 
@@ -54,7 +54,7 @@ header a {
   max-width: 300px;
 }
 
-.fixImage{
+.fixImage {
   height: 350px;
 }
 
@@ -88,6 +88,7 @@ header a {
 .navbar-brand {
   font-weight: bold;
 }
+
 .side-navbar {
   width: 240px;
   height: 100%;
@@ -100,12 +101,15 @@ header a {
 .site-container {
   transition: 0.4s;
 }
+
 .active-cont {
   margin-left: 240px;
 }
+
 .active-nav {
   left: 0;
 }
+
 .text-bold {
   font-weight: bold;
 }

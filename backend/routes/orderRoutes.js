@@ -7,6 +7,11 @@ const { isAdmin } = require('../utils/isAdmin');
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
 
+router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find().populate('user', 'name');
+  res.send(orders);
+}));
+
 router.post('/', isAuth, expressAsyncHandler(async (req, res) => {
   const newOrder = new Order({
     orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
@@ -62,7 +67,7 @@ router.get('/summary', isAuth, isAdmin, expressAsyncHandler(async (req, res) => 
       },
     },
   ]);
-  
+
   res.send({ users, orders, dailyOrders, productCategories });
 }));
 
