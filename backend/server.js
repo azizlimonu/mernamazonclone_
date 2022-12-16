@@ -12,6 +12,7 @@ const seedRouter = require('./routes/seedRoutes');
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
 const orderRouter = require('./routes/orderRoutes');
+const uploadRouter = require('./routes/uploadRoutes');
 
 const corsOptions = {
   origin: ['http://localhost:3000'],
@@ -40,6 +41,7 @@ app.use('/api/seed', seedRouter);
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/upload', uploadRouter);
 
 // const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, '/frontend/build')));
