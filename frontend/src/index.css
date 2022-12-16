@@ -54,6 +54,10 @@ header a {
   max-width: 300px;
 }
 
+.fixImage{
+  height: 350px;
+}
+
 .product-info {
   padding: 1rem;
 }
