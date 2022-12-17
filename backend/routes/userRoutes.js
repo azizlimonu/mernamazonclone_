@@ -5,6 +5,38 @@ const User = require('../models/userModel');
 const expressAsyncHandler = require('express-async-handler');
 const { generateToken } = require('../utils/generateToken');
 const { isAuth } = require('../utils/isAuth');
+const { isAdmin } = require('../utils/isAdmin')
+
+// admin router to get users
+router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+}));
+
+// get user info by admin
+router.get('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send({ message: 'USER NOT FOUND' });
+  }
+}));
+
+// updated user by admin
+router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    user.isAdmin = Boolean(req.body.isAdmin);
+    const updatedUser = await user.save();
+
+    res.send({ message: 'User Updated', user: updatedUser });
+  } else {
+    res.status(404).send({ message: 'USER NOT FOUND' });
+  }
+}));
 
 // signin user method post
 router.post('/signin', expressAsyncHandler(async (req, res) => {
@@ -30,6 +62,11 @@ router.post('/signin', expressAsyncHandler(async (req, res) => {
 }));
 
 router.post('/signup', expressAsyncHandler(async (req, res) => {
+  const { email } = req.body.email
+  const duplicate = await User.findOne({ email });
+  if (duplicate) {
+    return res.status(400).send({ message: 'EMAIL IS ALREADY REGISTERED' })
+  }
   const newUser = new User({
     name: req.body.name,
     email: req.body.email,

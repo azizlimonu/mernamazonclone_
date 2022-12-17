@@ -222,14 +222,14 @@ function App() {
             <Route path="/admin/users" element={
               <AdminRoute><UserListScreen /></AdminRoute>
             } />
+            <Route path="/admin/users/:id" element={
+              <AdminRoute><UserEditScreen /></AdminRoute>
+            } />
             <Route path="/admin/products" element={
               <AdminRoute><ProductListScreen /></AdminRoute>
             } />
             <Route path="/admin/product/:id" element={
               <AdminRoute><ProductEditScreen /></AdminRoute>
-            } />
-            <Route path="/admin/users/:id" element={
-              <AdminRoute><UserEditScreen /></AdminRoute>
             } />
           </Routes>
         </Container>
