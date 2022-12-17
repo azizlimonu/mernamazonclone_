@@ -83,9 +83,9 @@ const UserEditScreen = () => {
   return (
     <Container className='w-75'>
       <Helmet>
-        <title>Edit User ${name}</title>
+        <title>Edit User {name}</title>
       </Helmet>
-      <h1>Edit User ${name}</h1>
+      <h1>Edit User {name}</h1>
 
       {loading ? (<Loading />) : error ? <Error>{error}</Error> : (
         <Form onSubmit={submitHandler}>

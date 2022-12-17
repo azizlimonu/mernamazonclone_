@@ -38,6 +38,21 @@ router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   }
 }));
 
+// deleted user by admin
+router.delete('/:id',isAuth,isAdmin,expressAsyncHandler(async(req,res)=>{
+  const user = await User.findById(req.params.id);
+  if(user){
+    if(user.email === process.env.ADMIN){
+      res.status(400).send({message:'CANNOT DELETE ADMIN'});
+    }else {
+      await user.remove();
+      res.send({message:`User ${user.name} has been deleted`});
+    }
+  } else {
+    res.status(404).send({message:'User Not Found'});
+  }
+}));
+
 // signin user method post
 router.post('/signin', expressAsyncHandler(async (req, res) => {
   try {
