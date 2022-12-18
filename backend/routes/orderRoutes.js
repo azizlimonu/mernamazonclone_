@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const expressAsyncHandler = require('express-async-handler');
 const Order = require('../models/orderModel');
-const { isAuth } = require('../utils/isAuth');
-const { isAdmin } = require('../utils/isAdmin');
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
+const { isAdmin } = require('../utils/isAdmin');
+const { isAuth } = require('../utils/isAuth');
+const { mailgun } = require('../utils/mailgun');
+const { payOrderEmailTemplate } = require('../utils/payOrderEmailTemplate');
 
 // router for orders
 router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
@@ -107,7 +109,10 @@ router.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
 }));
 
 router.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'email name'
+  );
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -118,6 +123,23 @@ router.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
       email_address: req.body.email_address,
     };
     const updatedOrder = await order.save();
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Amazona <amazona@mg.yourdomain.com>',
+          to: `${order.user.name} <${order.user.email}>`,
+          subject: `New order ${order._id}`,
+          html: payOrderEmailTemplate(order),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(body);
+          }
+        }
+      );
     res.send({ message: "order Paid", order: updatedOrder });
   } else {
     res.status(404).send({ message: 'Order Not Found' });

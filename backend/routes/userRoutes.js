@@ -10,7 +10,12 @@ const { isAdmin } = require('../utils/isAdmin')
 // admin router to get users
 router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   const users = await User.find({});
-  res.send(users);
+  if (users) {
+    const { password, ...otherDetails } = users;
+    res.send(otherDetails);
+  }
+  res.status(404).send({ message: 'USER NOT FOUND' });
+  // res.send(users);
 }));
 
 // get user info by admin
@@ -39,17 +44,17 @@ router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
 }));
 
 // deleted user by admin
-router.delete('/:id',isAuth,isAdmin,expressAsyncHandler(async(req,res)=>{
+router.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
-  if(user){
-    if(user.email === process.env.ADMIN){
-      res.status(400).send({message:'CANNOT DELETE ADMIN'});
-    }else {
+  if (user) {
+    if (user.email === process.env.ADMIN) {
+      res.status(400).send({ message: 'CANNOT DELETE ADMIN' });
+    } else {
       await user.remove();
-      res.send({message:`User ${user.name} has been deleted`});
+      res.send({ message: `User ${user.name} has been deleted` });
     }
   } else {
-    res.status(404).send({message:'User Not Found'});
+    res.status(404).send({ message: 'User Not Found' });
   }
 }));
 
