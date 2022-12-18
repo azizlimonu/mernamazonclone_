@@ -3,10 +3,14 @@ import React, { useContext, useEffect, useReducer, useRef, useState } from 'reac
 import { Helmet } from 'react-helmet-async';
 import { Form, useNavigate, useParams } from 'react-router-dom'
 import logger from 'use-reducer-logger';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import Rating from '../components/Rating';
+import { Store } from '../store';
+import {getError} from '../utils/getError';
 
 import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
@@ -14,9 +18,8 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
-import { Store } from '../store';
-import { Link } from 'react-router-dom';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -26,6 +29,15 @@ const reducer = (state, action) => {
       return { ...state, product: action.payload, loading: false };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+
+    case 'CREATE_REQUEST':
+      return { ...state, loadingCreateReview: true };
+    case 'CREATE_SUCCESS':
+      return { ...state, loadingCreateReview: false };
+    case 'CREATE_FAIL':
+      return { ...state, loadingCreateReview: false };
+    case 'REFRESH_PRODUCT':
+      return { ...state, product: action.payload };
     default:
       break;
   }
@@ -47,7 +59,8 @@ const ProductScreen = () => {
     loading: false,
     error: '',
   }
-  const [{ product, loading, error }, dispatch] = useReducer(logger(reducer), initialState);
+
+  const [{ product, loading, error, loadingCreateReview }, dispatch] = useReducer(logger(reducer), initialState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,10 +94,36 @@ const ProductScreen = () => {
     navigate('/cart');
   }
 
-  const loadingCreateReview = false;
-
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    if (!comment || !rating) {
+      toast.error('Please enter comment and rating');
+      return;
+    }
+    try {
+      const { data } = await axios.post(
+        `/api/products/${product._id}/reviews`,
+        { rating, comment, name: userInfo.name },
+        { headers: { Authorization: `Bearer ${userInfo.token}` } });
+
+      dispatch({ type: 'CREATE_SUCCESS' });
+      toast.success('Review submitted successfully');
+
+      // update product review, total review and rating
+      product.reviews.unshift(data.review);
+      product.numReviews = data.numReviews;
+      product.rating = data.rating;
+
+      // update the product and reFresh and scroll to the review sect-
+      dispatch({ type: 'REFRESH_PRODUCT', payload: product });
+      window.scrollTo({
+        behavior: 'smooth',
+        top: reviewRef.current.offsetTop,
+      });
+    } catch (error) {
+      toast.error(getError(error));
+      dispatch({ type: 'CREATE_FAIL' });
+    }
   };
 
   return (
