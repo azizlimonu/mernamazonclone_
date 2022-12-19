@@ -10,12 +10,7 @@ const { isAdmin } = require('../utils/isAdmin')
 // admin router to get users
 router.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
   const users = await User.find({});
-  if (users) {
-    const { password, ...otherDetails } = users;
-    res.send(otherDetails);
-  }
-  res.status(404).send({ message: 'USER NOT FOUND' });
-  // res.send(users);
+  res.send(users);
 }));
 
 // get user info by admin

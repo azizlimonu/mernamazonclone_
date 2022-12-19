@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
-import { Form, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import logger from 'use-reducer-logger';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ import Loading from '../components/Loading';
 import Error from '../components/Error';
 import Rating from '../components/Rating';
 import { Store } from '../store';
-import {getError} from '../utils/getError';
+import { getError } from '../utils/getError';
 
 import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
@@ -18,6 +18,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 
@@ -44,7 +45,7 @@ const reducer = (state, action) => {
 };
 
 const ProductScreen = () => {
-  let reviewRef = useRef();
+  let reviewsRef = useRef();
 
   const navigate = useNavigate();
   const params = useParams();
@@ -104,7 +105,10 @@ const ProductScreen = () => {
       const { data } = await axios.post(
         `/api/products/${product._id}/reviews`,
         { rating, comment, name: userInfo.name },
-        { headers: { Authorization: `Bearer ${userInfo.token}` } });
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
 
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Review submitted successfully');
@@ -118,7 +122,7 @@ const ProductScreen = () => {
       dispatch({ type: 'REFRESH_PRODUCT', payload: product });
       window.scrollTo({
         behavior: 'smooth',
-        top: reviewRef.current.offsetTop,
+        top: reviewsRef.current.offsetTop,
       });
     } catch (error) {
       toast.error(getError(error));
@@ -208,7 +212,7 @@ const ProductScreen = () => {
               </Row>
 
               <div className='my-3'>
-                <h2 ref={reviewRef}>Reviews</h2>
+                <h2 ref={reviewsRef}>Reviews</h2>
                 <div className='mb-3'>
                   {product?.reviews?.length === 0 && (
                     <Error>There's No Review</Error>
@@ -227,7 +231,7 @@ const ProductScreen = () => {
 
                 <div className='my-3'>
                   {userInfo ? (
-                    <form onSubmit={submitHandler}>
+                    <Form onSubmit={submitHandler}>
                       <h2>Write a customer review</h2>
                       <Form.Group className="mb-3" controlId="rating">
                         <Form.Label>Rating</Form.Label>
@@ -263,7 +267,7 @@ const ProductScreen = () => {
                         </Button>
                         {loadingCreateReview && <Loading />}
                       </div>
-                    </form>
+                    </Form>
                   ) : (
                     <Error>
                       Please{' '}
