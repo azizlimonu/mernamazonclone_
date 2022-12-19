@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer, useState } from 'react'
-import { Button, Container, Form } from 'react-bootstrap';
+import { Button, Container, Form, ListGroup } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -58,6 +58,7 @@ const ProductEditScreen = () => {
   const [slug, setSlug] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState('');
+  const [images, setImages] = useState([]);
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
@@ -72,6 +73,7 @@ const ProductEditScreen = () => {
         setSlug(data.slug);
         setPrice(data.price);
         setImage(data.image);
+        setImages(data.images);
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setBrand(data.brand);
@@ -99,6 +101,7 @@ const ProductEditScreen = () => {
           slug,
           price,
           image,
+          images,
           category,
           brand,
           countInStock,
@@ -115,7 +118,7 @@ const ProductEditScreen = () => {
     }
   };
 
-  const uploadFileHandler = async (e) => {
+  const uploadFileHandler = async (e, forImages) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
@@ -131,12 +134,23 @@ const ProductEditScreen = () => {
       dispatch({ type: 'UPLOAD_SUCCESS' });
 
       toast.success('Image uploaded successfully');
-      setImage(data.secure_url);
+      if (forImages) {
+        setImages([...images, data.secure_url]);
+      } else {
+        setImage(data.secure_url);
+      }
+      toast.success('Image Uploaded Successfully. Click update to apply it');
     } catch (error) {
       toast.error(getError(error));
       dispatch({ type: 'UPLOAD_FAIL', payload: getError(error) });
     }
   }
+
+  const deleteFileHandler = async (fileName) => {
+    console.log(fileName);
+    setImages(images.filter((x) => x !== fileName));
+    toast.success('Image Removed Successfully. Click Update to apply')
+  };
 
   return (
     <Container className="small-container">
@@ -184,10 +198,35 @@ const ProductEditScreen = () => {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="imageFile">
-            <Form.Label>Upload File</Form.Label>
+            <Form.Label>Upload Image</Form.Label>
             <Form.Control type="file" onChange={uploadFileHandler} />
             {loadingUpload && <Loading />}
           </Form.Group>
+
+          <Form.Group className='mb-3' controlId='image'>
+            <Form.Label>Additional Images</Form.Label>
+            {images.length === 0 && <Error>No image</Error>}
+            <ListGroup variant="flush">
+              {images?.map((item) => (
+                <ListGroup.Item key={item}>
+                  {item}
+                  <Button variant='light' onClick={() => deleteFileHandler(item)}>
+                    <i className='fa fa-times-circle'></i>
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Form.Group>
+
+          <Form.Group className='mb-3' controlId='additionalImageFile'>
+            <Form.Label>Upload Aditional Image</Form.Label>
+            <Form.Control
+              type='file'
+              onChange={(e) => uploadFileHandler(e, true)}
+            />
+            {loadingUpload && <Loading />}
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="category">
             <Form.Label>Category</Form.Label>
             <Form.Control
