@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema(
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
     image: { type: String, required: true },
-    images:[String],
+    images: [String],
     brand: { type: String, required: true },
     category: { type: String, required: true },
     description: { type: String, required: true },
@@ -20,6 +20,7 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, required: true },
     numReviews: { type: Number, required: true },
     reviews: [reviewSchema],
+    choice: [{ name: { type: String }, stock: { type: Number } }]
   },
   { timestamps: true }
 );

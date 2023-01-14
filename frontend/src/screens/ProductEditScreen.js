@@ -63,6 +63,7 @@ const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
   const [description, setDescription] = useState('');
+  const [choice, setChoice] = useState([{ name: "", stock: 0 }]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,6 +79,7 @@ const ProductEditScreen = () => {
         setCountInStock(data.countInStock);
         setBrand(data.brand);
         setDescription(data.description);
+        setChoice(data.choice);
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({
@@ -106,6 +108,7 @@ const ProductEditScreen = () => {
           brand,
           countInStock,
           description,
+          choice,
         }, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
@@ -150,6 +153,22 @@ const ProductEditScreen = () => {
     console.log(fileName);
     setImages(images.filter((x) => x !== fileName));
     toast.success('Image Removed Successfully. Click Update to apply')
+  };
+
+  const [nameChoice, setNameChoice] = useState("");
+  const [choiceStock, setChoiceStock] = useState(0);
+
+  const handleChoice = (e) => {
+    e.preventDefault();
+    const choices = { name: nameChoice, stock: choiceStock };
+    // setChoice((prev) => [...prev, { ...prev, choices }]);
+    setChoice([choices, ...choice]);
+    setNameChoice("");
+    setChoiceStock("");
+  };
+
+  const deleteChoice = (item) => {
+    setChoice(choice.filter((x) => x !== item));
   };
 
   return (
@@ -259,6 +278,37 @@ const ProductEditScreen = () => {
               required
             />
           </Form.Group>
+
+          <Form.Group className="mb-3 " controlId="addChoiceName">
+            <Form.Label>Name Choices</Form.Label>
+            <Form.Control
+              value={nameChoice}
+              onChange={(e) => setNameChoice(e.target.value)}
+            />
+
+            <Form.Label>Choices Stock</Form.Label>
+            <Form.Control
+              value={choiceStock}
+              onChange={(e) => setChoiceStock(e.target.value)}
+            />
+            <button onClick={handleChoice}>Add Choices</button>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Choice</Form.Label>
+            {choice?.map((item, i) => (
+              <ListGroup variant="flush" key={i}>
+                <div className='d-flex flex-row'>
+                  <ListGroup.Item>Name : {item.name}</ListGroup.Item>
+                  <ListGroup.Item>Stock : {item.stock}</ListGroup.Item>
+                  <Button variant="danger" onClick={() => deleteChoice(item)}>
+                    delete
+                  </Button>
+                </div>
+              </ListGroup>
+            ))}
+          </Form.Group>
+
           <div className="mb-3">
             <Button disabled={loadingUpdate} type="submit">
               Update
@@ -266,8 +316,9 @@ const ProductEditScreen = () => {
             {loadingUpdate && <Loading />}
           </div>
         </Form>
-      )}
-    </Container>
+      )
+      }
+    </Container >
   )
 }
 

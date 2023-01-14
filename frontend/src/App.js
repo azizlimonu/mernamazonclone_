@@ -184,7 +184,7 @@ function App() {
       </div>
 
       {/* main section */}
-      <main>
+      <main style={{"minHeight":"100vh"}}>
         <Container className='mt-3'>
           <Routes>
             <Route path='/' element={<HomeScreen />} />

@@ -15,7 +15,7 @@ const orderRouter = require('./routes/orderRoutes');
 const uploadRouter = require('./routes/uploadRoutes');
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: [process.env.ORIGIN],
 };
 
 mongoose.set('strictQuery', true);

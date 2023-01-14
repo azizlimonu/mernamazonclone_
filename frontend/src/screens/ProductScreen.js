@@ -67,9 +67,11 @@ function ProductScreen() {
     };
     fetchData();
   }, [slug]);
+  // console.log(product);
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
+  
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -117,6 +119,7 @@ function ProductScreen() {
       dispatch({ type: 'CREATE_FAIL' });
     }
   };
+  
   return loading ? (
     <Loading />
   ) : error ? (
@@ -165,6 +168,15 @@ function ProductScreen() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
+              <Row>
+                {product.choice?.map((item, i) => (
+                  <Col className='d-flex justify-content-center p-1 mx-1 rounded' style={{ "backgroundColor": "#d63384", "cursor": "pointer" }}>
+                    {item.name}
+                  </Col>
+                ))}
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
               Description:
               <p>{product.description}</p>
             </ListGroup.Item>
@@ -181,15 +193,17 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Row>
-                    <Col>Status:</Col>
-                    <Col>
-                      {product.countInStock > 0 ? (
-                        <Badge bg="success">In Stock</Badge>
-                      ) : (
-                        <Badge bg="danger">Unavailable</Badge>
-                      )}
-                    </Col>
+                  <Row>      
+                      <>
+                        <Col>Status:</Col>
+                        <Col>
+                          {product.countInStock > 0 ? (
+                            <Badge bg="success">In Stock</Badge>
+                          ) : (
+                            <Badge bg="danger">Unavailable</Badge>
+                          )}
+                        </Col>
+                      </>
                   </Row>
                 </ListGroup.Item>
 
@@ -206,7 +220,7 @@ function ProductScreen() {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Row >
       <div className="my-3">
         <h2 ref={reviewsRef}>Reviews</h2>
         <div className="mb-3">
@@ -260,7 +274,7 @@ function ProductScreen() {
                 <Button disabled={loadingCreateReview} type="submit">
                   Submit
                 </Button>
-                {loadingCreateReview && <Loading/>}
+                {loadingCreateReview && <Loading />}
               </div>
             </form>
           ) : (
@@ -274,7 +288,7 @@ function ProductScreen() {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 export default ProductScreen;

@@ -6,6 +6,8 @@ import Error from '../components/Error';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet-async';
+import Banner from '../components/Banner';
+import Categories from '../components/Categories';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -47,7 +49,9 @@ const HomeScreen = () => {
       <Helmet>
         <title>Amazona</title>
       </Helmet>
-      <h1>Featured Products</h1>
+      <Banner />
+      <Categories />
+      <h1 className='mt-4'>Featured Products</h1>
       <div className="products">
         {state?.loading
           ? (<Loading />)

@@ -31,6 +31,7 @@ router.post('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     rating: 0,
     numReviews: 0,
     description: 'sample description',
+    choice: [{ name: "S", stock: 5 }, { name: "M", stock: 15 }, { name: "L", stock: 25 }, { name: "XL", stock: 35 }]
   });
   const product = await newProduct.save();
   res.send({ message: 'Product Created', product });
@@ -50,6 +51,7 @@ router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     product.brand = req.body.brand;
     product.countInStock = req.body.countInStock;
     product.description = req.body.description;
+    product.choice = req.body.choice
     await product.save();
     res.send({ message: 'Product Updated' });
   } else {
@@ -86,9 +88,7 @@ router.post('/:id/reviews', isAuth, expressAsyncHandler(async (req, res) => {
 
     product.reviews.push(review);
     product.numReviews = product.reviews.length;
-    product.rating =
-      product.reviews.reduce((a, c) => c.rating + a, 0) /
-      product.reviews.length;
+    product.rating = product.reviews.reduce((a, c) => c.rating + a, 0) / product.reviews.length;
 
     const updatedProduct = await product.save();
 
