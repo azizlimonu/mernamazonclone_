@@ -63,7 +63,7 @@ const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
   const [description, setDescription] = useState('');
-  const [choice, setChoice] = useState([{ name: "", stock: 0 }]);
+  const [variant, setVariant] = useState([{ name: "", stock: 0 }]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +79,7 @@ const ProductEditScreen = () => {
         setCountInStock(data.countInStock);
         setBrand(data.brand);
         setDescription(data.description);
-        setChoice(data.choice);
+        setVariant(data.variant || [{ name: "", stock: "" }]);
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({
@@ -90,7 +90,8 @@ const ProductEditScreen = () => {
     };
     fetchData();
   }, [productId]);
-
+  
+  console.log("after fetch", variant);
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -108,7 +109,7 @@ const ProductEditScreen = () => {
           brand,
           countInStock,
           description,
-          choice,
+          variant,
         }, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
@@ -162,13 +163,14 @@ const ProductEditScreen = () => {
     e.preventDefault();
     const choices = { name: nameChoice, stock: choiceStock };
     // setChoice((prev) => [...prev, { ...prev, choices }]);
-    setChoice([choices, ...choice]);
+    setVariant([choices, ...variant]);
     setNameChoice("");
     setChoiceStock("");
+    console.log(variant);
   };
 
   const deleteChoice = (item) => {
-    setChoice(choice.filter((x) => x !== item));
+    setVariant(variant.filter((x) => x !== item));
   };
 
   return (
@@ -276,6 +278,8 @@ const ProductEditScreen = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              as="textarea"
+              rows={3}
             />
           </Form.Group>
 
@@ -295,8 +299,8 @@ const ProductEditScreen = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Choice</Form.Label>
-            {choice?.map((item, i) => (
+            <Form.Label>Variant</Form.Label>
+            {variant?.map((item, i) => (
               <ListGroup variant="flush" key={i}>
                 <div className='d-flex flex-row'>
                   <ListGroup.Item>Name : {item.name}</ListGroup.Item>

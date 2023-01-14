@@ -22,18 +22,21 @@ const CartScreen = () => {
   const {
     cart: { cartItems }
   } = state;
+  console.log("cart", cartItems);
 
   // cart functionality
   const updateCartHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
-    if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
-      return;
+    const existChoice = data?.variant.find(x => x.name === item.choose);
+    if (existChoice) {
+      if (data.variant.stock < quantity) {
+        window.alert('Sorry. Product is out of stock');
+      }
+      ctxDispatch({
+        type: 'CART_ADD_ITEM',
+        payload: { ...item, quantity },
+      });
     }
-    ctxDispatch({
-      type: 'CART_ADD_ITEM',
-      payload: { ...item, quantity },
-    });
   };
 
   const removeItemHandler = (item) => {
@@ -64,8 +67,8 @@ const CartScreen = () => {
             )
             : (
               <ListGroup>
-                {cartItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
+                {cartItems.map((item, idx) => (
+                  <ListGroup.Item key={idx}>
                     <Row className="align-items-center">
                       <Col md={4}>
                         <img
@@ -76,7 +79,7 @@ const CartScreen = () => {
                         ></img>{' '}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>
                       </Col>
-                      <Col md={3}>
+                      <Col md={2}>
                         <Button
                           onClick={() => updateCartHandler(item, item.quantity - 1)}
                           variant="light"
@@ -93,7 +96,8 @@ const CartScreen = () => {
                           <i className="fas fa-plus-circle"></i>
                         </Button>
                       </Col>
-                      <Col md={3}>${item.price}</Col>
+                      <Col md={2}>{item.choose}</Col>
+                      <Col md={2}>${item.price}</Col>
                       <Col md={2}>
                         <Button
                           onClick={() => removeItemHandler(item)}

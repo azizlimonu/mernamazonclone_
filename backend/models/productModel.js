@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, required: true },
     numReviews: { type: Number, required: true },
     reviews: [reviewSchema],
-    choice: [{ name: { type: String }, stock: { type: Number } }]
+    variant: [{ name: { type: String }, stock: { type: Number } }]
   },
   { timestamps: true }
 );

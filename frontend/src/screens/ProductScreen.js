@@ -55,6 +55,7 @@ function ProductScreen() {
       loading: true,
       error: '',
     });
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -71,21 +72,25 @@ function ProductScreen() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
-  
+
   const addToCartHandler = async () => {
-    const existItem = cart.cartItems.find((x) => x._id === product._id);
+    // edit ini
+    const existItem = cart.cartItems.find(
+      (item) => item._id === product._id && product.choose === item.choose
+    );
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
+      window.alert('Sorry, Product is out of stock');
       return;
     }
     ctxDispatch({
       type: 'CART_ADD_ITEM',
-      payload: { ...product, quantity },
+      payload: { ...product, quantity, choose },
     });
     navigate('/cart');
   };
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -119,7 +124,13 @@ function ProductScreen() {
       dispatch({ type: 'CREATE_FAIL' });
     }
   };
-  
+  // const { choose, ...product } = product
+
+
+  const [choose, setChoose] = useState("");
+  console.log("choose", choose);
+  console.log(product);
+
   return loading ? (
     <Loading />
   ) : error ? (
@@ -167,15 +178,25 @@ function ProductScreen() {
                 ))}
               </Row>
             </ListGroup.Item>
+
             <ListGroup.Item>
               <Row>
-                {product.choice?.map((item, i) => (
-                  <Col className='d-flex justify-content-center p-1 mx-1 rounded' style={{ "backgroundColor": "#d63384", "cursor": "pointer" }}>
-                    {item.name}
-                  </Col>
-                ))}
+                <Form.Group controlId="chooseSelect">
+                  <Form.Label>Select Type</Form.Label>
+                  <Form.Select
+                    aria-label="Choose"
+                    value={choose}
+                    onChange={(e) => setChoose(e.target.value)}
+                  >
+                    <option value=''>Choose Type</option>
+                    {product.variant?.map((item, i) => (
+                      <option value={item.name} key={i}>{item.name}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
               </Row>
             </ListGroup.Item>
+
             <ListGroup.Item>
               Description:
               <p>{product.description}</p>
@@ -193,24 +214,24 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Row>      
-                      <>
-                        <Col>Status:</Col>
-                        <Col>
-                          {product.countInStock > 0 ? (
-                            <Badge bg="success">In Stock</Badge>
-                          ) : (
-                            <Badge bg="danger">Unavailable</Badge>
-                          )}
-                        </Col>
-                      </>
+                  <Row>
+                    <>
+                      <Col>Status:</Col>
+                      <Col>
+                        {product.countInStock > 0 ? (
+                          <Badge bg="success">In Stock</Badge>
+                        ) : (
+                          <Badge bg="danger">Unavailable</Badge>
+                        )}
+                      </Col>
+                    </>
                   </Row>
                 </ListGroup.Item>
 
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
-                      <Button onClick={addToCartHandler} variant="primary">
+                      <Button onClick={addToCartHandler} variant="primary" disabled={choose === ""}>
                         Add to Cart
                       </Button>
                     </div>
@@ -221,6 +242,7 @@ function ProductScreen() {
           </Card>
         </Col>
       </Row >
+
       <div className="my-3">
         <h2 ref={reviewsRef}>Reviews</h2>
         <div className="mb-3">

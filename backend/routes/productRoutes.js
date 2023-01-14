@@ -31,7 +31,7 @@ router.post('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     rating: 0,
     numReviews: 0,
     description: 'sample description',
-    choice: [{ name: "S", stock: 5 }, { name: "M", stock: 15 }, { name: "L", stock: 25 }, { name: "XL", stock: 35 }]
+    variant: [{ name: "S", stock: 5 }, { name: "M", stock: 15 }, { name: "L", stock: 25 }, { name: "XL", stock: 35 }]
   });
   const product = await newProduct.save();
   res.send({ message: 'Product Created', product });
@@ -51,7 +51,7 @@ router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     product.brand = req.body.brand;
     product.countInStock = req.body.countInStock;
     product.description = req.body.description;
-    product.choice = req.body.choice
+    product.variant = req.body.variant
     await product.save();
     res.send({ message: 'Product Updated' });
   } else {
@@ -205,7 +205,7 @@ router.get('/search', expressAsyncHandler(async (req, res) => {
 
 // get product by slug
 router.get('/slug/:slug', async (req, res) => {
-  const product = await Product.findOne({ slug: req.params.slug });
+  const product = await Product.findOne({ slug: req.params.slug },"");
   if (product) {
     res.send(product);
   } else {
