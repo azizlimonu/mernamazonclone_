@@ -41,6 +41,7 @@ import UserEditScreen from "./screens/UserEditScreen";
 import { Store } from './store';
 import ProfileScreen from "./screens/ProfileScreen";
 import { getError } from "./utils/getError";
+import Footer from "./components/Footer";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -184,7 +185,7 @@ function App() {
       </div>
 
       {/* main section */}
-      <main style={{"minHeight":"100vh"}}>
+      <main style={{ "minHeight": "100vh" }}>
         <Container className='mt-3'>
           <Routes>
             <Route path='/' element={<HomeScreen />} />
@@ -236,9 +237,7 @@ function App() {
       </main >
 
       {/* footer */}
-      <footer>
-        <div className="text-center">All rights reserved</div>
-      </footer>
+      <Footer />
     </div >
   );
 }
