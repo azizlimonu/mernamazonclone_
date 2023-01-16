@@ -51,7 +51,7 @@ const HomeScreen = () => {
       </Helmet>
       <Banner />
       <Categories />
-      <h1 className='mt-4'>Featured Products</h1>
+      <h1 className='mt-5 text-center mb-3'>Featured Products</h1>
       <div className="products">
         {state?.loading
           ? (<Loading />)

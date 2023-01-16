@@ -89,15 +89,6 @@ header a {
   font-weight: bold;
 }
 
-.side-navbar {
-  width: 240px;
-  height: 100%;
-  position: absolute;
-  left: -300px;
-  background-color: #100901;
-  transition: 0.5s;
-}
-
 .site-container {
   transition: 0.4s;
 }
@@ -113,3 +104,55 @@ header a {
 .text-bold {
   font-weight: bold;
 }
+
+.categories-item {
+  position: relative;
+  height: 373px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.5s ease-in-out;
+}
+
+.categories-item:hover a {
+  display: block;
+}
+
+.categories-item img {
+  height: 373px;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.categories-item div {
+  position: absolute;
+  bottom: 0%;
+  background: rgba(230, 228, 228, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  min-height: 60px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.categories-item div h4 {
+  font-weight: 700;
+  text-align: center;
+}
+
+.categories-item div p a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  color: rgb(205, 117, 146);
+  display: none;
+}
+
+.categories-item div p a :hover {
+  color: #404040;
+}
+
