@@ -91,7 +91,7 @@ const ProductEditScreen = () => {
     fetchData();
   }, [productId]);
   
-  console.log("after fetch", variant);
+  // console.log("after fetch", variant);
   const submitHandler = async (e) => {
     e.preventDefault();
 

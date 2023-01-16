@@ -1,0 +1,40 @@
+.carousellitem {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-poppins);
+  background-image: url("https://res.cloudinary.com/mehedi08h/image/upload/v1648866793/shopx/banner/parallax_mrz2mq.jpg");
+
+  .slidercontent {
+    margin-top: 30px;
+
+    p {
+      color: var(--color-gray);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      color: black;
+      line-height: 70px;
+      font-size: 50px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    div {
+      margin-top: 30px;
+
+      a {
+        border: none;
+        text-decoration: none;
+        background-color: brown;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

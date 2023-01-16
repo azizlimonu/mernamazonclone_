@@ -16,7 +16,7 @@ const SearchBox = () => {
   };
 
   return (
-    <Form className='d-flex mx-auto' onSubmit={submitHandler}>
+    <Form className='d-flex ' onSubmit={submitHandler} style={{"marginLeft":"30%","width":"900px"}}>
       <InputGroup>
         <FormControl
           type="text"

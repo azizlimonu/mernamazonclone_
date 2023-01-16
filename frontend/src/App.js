@@ -2,7 +2,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import {  ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // bootstrap
@@ -57,16 +57,17 @@ function App() {
       <ToastContainer position="bottom-center" limit={1} />
       {/* header */}
       <header>
-        <Navbar bg="dark" variant="dark" expand='lg' >
-          <Container className="d-flex">
+        <Navbar bg="dark" variant="dark" expand='lg'>
+          <Container className="d-flex align-items-center">
             {/* brand */}
             <LinkContainer to="/">
               <Navbar.Brand>Amazino</Navbar.Brand>
             </LinkContainer>
 
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            {/* search box */}
             <Navbar.Collapse id="basic-navbar-nav">
-              {/* search box */}
-              <SearchBox className='mx-auto justify-content-center' />
+              <SearchBox className='mx-auto  justify-content-center' />
               <Nav className="me-auto  w-100  justify-content-end">
                 <Link to="/cart" className="nav-link">
                   Cart
