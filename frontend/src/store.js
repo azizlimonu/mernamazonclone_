@@ -22,34 +22,25 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'CART_ADD_ITEM':
+    case "CART_ADD_ITEM":
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
         (item) => item._id === newItem._id && newItem.choose === item.choose
       );
-      // apakah existItem is true ada di list of cartItems ? 
-      // if true => map through the cartItems, and each item that mapping
-      // 1. if the item.id is equal to the exitItem.id
-      //    if its same than the variable will assigned to newItem else if the variable will assigned to item.
-      // 2. Else if the item.id doesnt equal with exisItem.id
-      //    we will push the newItem array to the list of cartItems
       const uniqueId = uuid().toString();
       const cartItems = existItem
         ? state.cart.cartItems.map((item) =>
-          item._id === existItem._id
-            ? newItem
-            : item
+          item.cartId === existItem.cartId ? newItem : item
         )
         : [...state.cart.cartItems, { ...newItem, cartId: uniqueId }];
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
 
-    case 'CART_REMOVE_ITEM': {
-      // check item.id and item.choose if same with the cartItems []
+
+
+    case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
         (item) => item.cartId !== action.payload.cartId
       );
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
 

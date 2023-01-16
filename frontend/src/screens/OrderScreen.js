@@ -171,6 +171,7 @@ const OrderScreen = () => {
     return navigate('/signin');
   }
 
+  console.log("order: ",order);
   return loading ? (
     <Loading></Loading>
   ) : error ? (
@@ -221,19 +222,30 @@ const OrderScreen = () => {
             <Card.Body>
               <Card.Title>Items</Card.Title>
               <ListGroup variant="flush">
-                {order.orderItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
+                <ListGroup.Item>
+                  <Row>
+                    <Col md={5}>Item Name</Col>
+                    <Col md={2}>Item Variant</Col>
+                    <Col md={2}>Item Qty</Col>
+                    <Col md={3}>Item Price</Col>
+                  </Row>
+                </ListGroup.Item>
+                {order.orderItems?.map((item,idx) => (
+                  <ListGroup.Item key={idx}>
                     <Row className="align-items-center">
-                      <Col md={6}>
+                      <Col md={5}>
                         <img
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
                           style={{ "height": "80px" }}
-                        ></img>{' '}
+                        />{' '}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>
                       </Col>
-                      <Col md={3}>
+                      <Col md={2} >
+                        <span >{item.choose}</span>
+                      </Col>
+                      <Col md={2}>
                         <span>{item.quantity}</span>
                       </Col>
                       <Col md={3}>${item.price}</Col>

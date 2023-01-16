@@ -26,8 +26,8 @@ const CartScreen = () => {
 
   // cart functionality
   const updateCartHandler = async (item, quantity) => {
-    console.log("item cart selected : ",item);
-    console.log("item qty selected: ",quantity);
+    console.log("item cart selected : ", item);
+    console.log("item qty selected: ", quantity);
     const { data } = await axios.get(`/api/products/${item._id}`);
     const existChoice = data?.variant.find(x => x.name === item.choose);
     if (existChoice) {
@@ -78,7 +78,7 @@ const CartScreen = () => {
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
-                        ></img>{' '}
+                        />{' '}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>
                       </Col>
                       <Col md={2}>
